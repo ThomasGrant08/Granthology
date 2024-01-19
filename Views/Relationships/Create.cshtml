@@ -1,0 +1,68 @@
+﻿@model Granthology.Models.Relationship
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Relationship</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (ViewData["ValidationErrors"] != null)
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var error in (IEnumerable<string>)ViewData["ValidationErrors"])
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="PersonAId" class="control-label"></label>
+                <select asp-for="PersonAId" class="form-control" asp-items="ViewBag.PersonAId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonBId" class="control-label"></label>
+                <select asp-for="PersonBId" class="form-control" asp-items="ViewBag.PersonBId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelationshipTypeDiscriminator">RelationshipType</label>
+                @Html.DropDownListFor(m => m.RelationshipType, ViewData["RelationshipType"] as SelectList, "Select Relationship Type")
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastUpdatedAt" class="control-label"></label>
+                <input asp-for="LastUpdatedAt" class="form-control" />
+                <span asp-validation-for="LastUpdatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeletedAt" class="control-label"></label>
+                <input asp-for="DeletedAt" class="form-control" />
+                <span asp-validation-for="DeletedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

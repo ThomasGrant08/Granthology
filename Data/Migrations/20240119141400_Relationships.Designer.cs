@@ -4,6 +4,7 @@ using Granthology.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Granthology.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240119141400_Relationships")]
+    partial class Relationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,7 +94,7 @@ namespace Granthology.Data.Migrations
                     b.Property<int>("PersonBId")
                         .HasColumnType("int");
 
-                    b.Property<string>("RelationshipTypeDiscriminator")
+                    b.Property<string>("RelationshipType")
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
@@ -104,7 +107,7 @@ namespace Granthology.Data.Migrations
 
                     b.ToTable("Relationships");
 
-                    b.HasDiscriminator<string>("RelationshipTypeDiscriminator").HasValue("Relationship");
+                    b.HasDiscriminator<string>("RelationshipType").HasValue("Relationship");
 
                     b.UseTphMappingStrategy();
                 });
@@ -334,7 +337,7 @@ namespace Granthology.Data.Migrations
             modelBuilder.Entity("Granthology.Models.Relationship", b =>
                 {
                     b.HasOne("Granthology.Models.Person", "PersonA")
-                        .WithMany("Relationships")
+                        .WithMany("ParentalRelationships")
                         .HasForeignKey("PersonAId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -403,7 +406,7 @@ namespace Granthology.Data.Migrations
 
             modelBuilder.Entity("Granthology.Models.Person", b =>
                 {
-                    b.Navigation("Relationships");
+                    b.Navigation("ParentalRelationships");
                 });
 #pragma warning restore 612, 618
         }

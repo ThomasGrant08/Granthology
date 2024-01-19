@@ -4,6 +4,7 @@ using Granthology.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Granthology.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240119132723_People")]
+    partial class People
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,47 +69,6 @@ namespace Granthology.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("People");
-                });
-
-            modelBuilder.Entity("Granthology.Models.Relationship", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PersonAId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonBId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RelationshipTypeDiscriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonAId");
-
-                    b.HasIndex("PersonBId");
-
-                    b.ToTable("Relationships");
-
-                    b.HasDiscriminator<string>("RelationshipTypeDiscriminator").HasValue("Relationship");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -311,45 +273,6 @@ namespace Granthology.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Granthology.Models.ParentChildRelationship", b =>
-                {
-                    b.HasBaseType("Granthology.Models.Relationship");
-
-                    b.Property<bool>("IsBiological")
-                        .HasColumnType("bit");
-
-                    b.HasDiscriminator().HasValue("ParentChild");
-                });
-
-            modelBuilder.Entity("Granthology.Models.PartnerRelationship", b =>
-                {
-                    b.HasBaseType("Granthology.Models.Relationship");
-
-                    b.Property<bool>("IsCurrent")
-                        .HasColumnType("bit");
-
-                    b.HasDiscriminator().HasValue("Partner");
-                });
-
-            modelBuilder.Entity("Granthology.Models.Relationship", b =>
-                {
-                    b.HasOne("Granthology.Models.Person", "PersonA")
-                        .WithMany("Relationships")
-                        .HasForeignKey("PersonAId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Granthology.Models.Person", "PersonB")
-                        .WithMany()
-                        .HasForeignKey("PersonBId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonA");
-
-                    b.Navigation("PersonB");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -399,11 +322,6 @@ namespace Granthology.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Granthology.Models.Person", b =>
-                {
-                    b.Navigation("Relationships");
                 });
 #pragma warning restore 612, 618
         }
